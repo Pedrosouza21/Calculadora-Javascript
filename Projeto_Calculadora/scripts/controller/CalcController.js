@@ -25,16 +25,29 @@ class CalcController {
             this.displayTime = this.currentDate.toLocaleTimeString(this._locale);
         }, 1000);
 
+        this.setLastNumberToDisplay();
+
+    }
+
+
+
+    addEventListenerAll(element, events, fn) {
+        events.split(' ').forEach(event => {
+            element.addEventListener(event, fn, false);
+        });
     }
 
 
     clearAll() {
         this._operation = [];
 
+        this.setLastNumberToDisplay();
     }
 
     clearEntry() {
         this._operation.pop();
+
+        this.setLastNumberToDisplay();
 
     }
 
@@ -67,17 +80,48 @@ class CalcController {
     //Utilizando Evall
 
     calc() {
-        let last = this._operation.pop();
 
+        let last = '';
+
+        if(this._operation.length > 3){
+            let last = this._operation.pop();
+
+        }
+       
         let result = eval(this._operation.join(""));
 
-        this._operation = [result, last];
+        if (last == '%'){
+            result = result /=100 ;
+            this._operation = [result]
 
+        }else {
+            this._operation = [result];
+
+            if(last) this._operation.push(last);
+
+        }
+
+
+        this.setLastNumberToDisplay();
     }
 
-    setLastNumeberToDisplay(){
 
-        
+    setLastNumberToDisplay() {
+
+        let lastNumber;
+        for (let i = this._operation.length - 1; i >= 0; i--) {
+
+            if (!this.isOperator(this._operation[i])) {
+                lastNumber = this._operation[i];
+                break;
+            }
+        }
+
+        if (!lastNumber) lastNumber = 0;
+
+        this.displayCalc = lastNumber;
+
+
     }
 
 
@@ -95,6 +139,7 @@ class CalcController {
 
             } else {
                 this.pushOperation(value);
+                this.setLastNumberToDisplay();
 
             }
 
@@ -108,7 +153,7 @@ class CalcController {
                 let newValue = this.getLastOperation().toString() + value.toString();
                 this.setLastOperation(parseInt(nemValue));
 
-                this.setLastNumeberToDisplay();
+                this.setLastNumberToDisplay();
 
                 //Atualizar Display
 
@@ -164,6 +209,7 @@ class CalcController {
                 break;
 
             case 'igual':
+                this.calc();
 
                 break;
 
@@ -193,19 +239,13 @@ class CalcController {
 
     }
 
-    addEventListenerAll(element, events, fn) {
-        events.split(' ').forEach(event => {
-            element.addEventListener(event, fn, false);
-        });
+    
 
 
-    }
-
-
-    initButtonsEvents() {
+    initButtonsEvents(){
         let buttons = document.querySelectorAll("#buttons > g, #parts > g");
 
-        buttons.forEach((btn, index) => {
+        buttons.forEach((btn, index)=>{
 
             this.addEventListenerAll(btn, "click drag mouseover", e => {
                 let textBtn = btn.className.baseVal.replace("btn-", "");
