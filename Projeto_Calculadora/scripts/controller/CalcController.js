@@ -43,7 +43,7 @@ class CalcController {
 
     clearAll() {
         this._operation = [];
-        this._lastNumber ='';
+        this._lastNumber = '';
         this._lastOperator = '';
 
         this.setLastNumberToDisplay();
@@ -53,13 +53,10 @@ class CalcController {
         this._operation.pop();
 
         this.setLastNumberToDisplay();
-
     }
 
     getLastOperation() {
         return this._operation[this._operation.length - 1];
-
-
     }
 
     setLastOperation(value) {
@@ -75,17 +72,12 @@ class CalcController {
         this._operation.push(value);
 
         if (this._operation.length > 3) {
-
             this.calc();
-
         }
-
     }
 
     getResult() {
-
         console.log('getResult', this._operation);
-
         return eval(this._operation.join(""));
     }
 
@@ -150,7 +142,6 @@ class CalcController {
         }
 
         return LastItem;
-
     }
 
 
@@ -158,17 +149,13 @@ class CalcController {
 
         let lastNumber = this.getLastItem(false);
 
-
         if (!lastNumber) lastNumber = 0;
 
         this.displayCalc = lastNumber;
-
-
     }
 
 
     addOperation(value) {
-
 
         if (isNaN(this.getLastOperation())) {
 
@@ -201,8 +188,6 @@ class CalcController {
         }
 
         console.log(this.operation)
-
-
     }
 
 
@@ -211,9 +196,12 @@ class CalcController {
 
     }
 
+    // Corrigindo Bugs do botão
     addDot() {
 
         let lastOperation = this.getLastOperation();
+
+        if (typeof lastOperation === 'string' && lastOperation.split('').indexOf('.') > -1) return;
 
         if (this.isOperator(lastOperation) || !lastOperation) {
             this.pushOperation('0.');
@@ -232,8 +220,8 @@ class CalcController {
     /* switch = se for feito x, faça y e pare
     break = pare
     Se clicar em ac, irá apagar tudo */
-
     /* Incrementando switch e case*/
+
     execBtn(value) {
         switch (value) {
             case 'ac':
