@@ -14,6 +14,7 @@ class CalcController {
         this.initButtonsEvents();
     }
 
+
     initialize() {
         this.setDisplayDateTime();
 
@@ -90,6 +91,7 @@ setError() {
 break = pare
 Se clicar em ac, irá apagar tudo */
 
+/* Incrementando switch e case*/
 execBtn(value) {
     switch (value) {
         case 'ac':
