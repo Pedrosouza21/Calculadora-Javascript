@@ -1,7 +1,7 @@
 class CalcController {
 
     /* se tiver "_" é porque ele é privado */
-    /*aprendendo constructor*/
+    /*aprendendo constructorr*/
 
     constructor() {
         this._operation = [];
