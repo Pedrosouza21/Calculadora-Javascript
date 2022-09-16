@@ -181,7 +181,7 @@ initButtonsEvents() {
 }
 
 
-/*método Set criado */
+/* acrescentando método Set criado */
 setDisplayDateTime() {
     this.displayDate = this.currentDate.toLocaleDateString(this._locale, {
         day: "2-digit",
