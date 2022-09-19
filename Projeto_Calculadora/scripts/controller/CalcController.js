@@ -15,9 +15,19 @@ class CalcController {
         this._dateEl = document.querySelector("#data");
         this._timeEl = document.querySelector("#hora");
         this._currentDate;
+
         this.initialize();
         this.initButtonsEvents();
         this.initKeyboard();
+    }
+
+    //Evento Control C e Control V 
+
+    copyToClipboard(){
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(this.displayCalc);
+        }   
+
     }
 
     pasteFromClipboard(){
@@ -34,48 +44,29 @@ class CalcController {
     }
 
 
-    //Evento Control C e Control V 
 
-    copyToClipboard(){
+    initialize() {
 
-        let input = document.createElement('input');
-
-        input.value = this.displayCalc;
-
-        document.body.appendChild(input);
-
-        input.select();
-
-        document.execCommand("Copy");
-
-        input.remove();
-
-    }
-
-
-    initialize(){
         this.setDisplayDateTime();
-
 
         setInterval(() => {
 
-            this.displayDate = this.currentDate.toLocaleDateString(this._locale);
-            this.displayTime = this.currentDate.toLocaleTimeString(this._locale);
+            this.setDisplayDateTime();
+
         }, 1000);
 
         this.setLastNumberToDisplay();
         this.pasteFromClipboard();
 
-        document.querySelectorAll9('.btn-ac').forEach(btn=>{
+        document.querySelectorAll('.btn-ac').forEach(btn => {
 
-            btn.addEventListener('dblclcik', e=>{
+            btn.addEventListener('dblclick', e => {
+
                 this.toggleAudio();
-            
 
             });
 
         });
-
 
     }
 
@@ -234,8 +225,7 @@ class CalcController {
             this._lastNumber = this.getLastItem(false);
         }
 
-        console.log('_lastOperator', this._lastOperator);
-        console.log('_lastNumber', this._lastNumber);
+    
 
         let result = this.getResult();
 
@@ -318,7 +308,7 @@ class CalcController {
 
         }
 
-        console.log(this.operation)
+        
     }
 
 
@@ -335,14 +325,13 @@ class CalcController {
         if (typeof lastOperation === 'string' && lastOperation.split('').indexOf('.') > -1) return;
 
         if (this.isOperator(lastOperation) || !lastOperation) {
-            this.pushOperation('0.');
+            this.setLastOperation('0.');
 
         } else {
             this.setLastOperation(lastOperation.toString() + '.');
         }
 
         this.setLastNumberToDisplay();
-
 
 
     }
@@ -368,23 +357,23 @@ class CalcController {
                 break;
 
             case 'soma':
-                this.addOperation(parseInt('+'));
+                this.addOperation('+');
                 break;
 
             case 'subtracao':
-                this.addOperation(parseInt('-'));
+                this.addOperation('-');
                 break;
 
             case 'divisao':
-                this.addOperation(parseInt('/'));
+                this.addOperation('/');
                 break;
 
             case 'multiplicacao':
-                this.addOperation(parseInt('*'));
+                this.addOperation('*');
                 break;
 
             case 'porcento':
-                this.addOperation(parseInt('%'));
+                this.addOperation('%');
                 break;
 
             case 'igual':
@@ -419,23 +408,27 @@ class CalcController {
     }
 
 
-
-
+//  corrigindo botão
     initButtonsEvents() {
+
         let buttons = document.querySelectorAll("#buttons > g, #parts > g");
 
         buttons.forEach((btn, index) => {
 
-            this.addEventListenerAll(btn, "click drag mouseover", e => {
+            this.addEventListenerAll(btn, 'click drag', e => {
+
                 let textBtn = btn.className.baseVal.replace("btn-", "");
 
-                this.execBtn();
+                this.execBtn(textBtn);
+
             });
 
-        });
+            this.addEventListenerAll(btn, 'mouseover mouseup mousedown', e => {
 
-        this.addEventListenerAll(btn, "mouseover mouseup mousedown", e => {
-            btn, style.cursor = "pointer";
+                btn.style.cursor = "pointer";
+
+            });
+
         });
 
     }
