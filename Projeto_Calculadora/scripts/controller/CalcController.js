@@ -198,6 +198,7 @@ class CalcController {
         }
     }
 
+//  arrumando erros eval
     getResult() {
         try{
             return eval(this._operation.join(""));
